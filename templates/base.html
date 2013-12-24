@@ -21,9 +21,16 @@
 
       <div class="row">
         {% for app, info in latest_backups.iteritems() %}
-          <div class="col-md-4">
-            <b>{{app}}</b>:
-            <span class="label label-{{info['status']}}">{{info['date']}}</span>
+          <div class="col-md-3" style="padding-bottom:6px;">
+            <p>
+              <b>{{app}}</b>
+              <br /><small class="text-muted">{{info['date']}}</small>
+              {% if info['status'] in ['warning','danger'] %}
+                <br /><span class="label label-{{info['status']}}">{{info['relative_date']}} ago</span>
+              {% else %}
+                <br /> &nbsp;
+              {% endif %}
+            </p>
           </div>
         {% endfor %}
       </div>

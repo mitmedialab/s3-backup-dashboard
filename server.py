@@ -1,4 +1,5 @@
 import os, logging, ConfigParser, inflector
+from relativedates import timesince
 from datetime import datetime
 from flask import Flask, render_template, json, jsonify
 from boto.s3.connection import S3Connection
@@ -41,7 +42,7 @@ def index():
                 status = 'warning'
             else:
                 status = 'danger'
-            latest_backups[app_name] = { 'date': date, 'status': status }
+            latest_backups[app_name] = { 'date': date, 'relative_date': timesince(date), 'status': status }
 
     return render_template("base.html", latest_backups=latest_backups)
 
