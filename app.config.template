@@ -1,0 +1,4 @@
+[s3]
+access_key_id: 123
+secret_access_key: 1234
+bucket: path/to/backups

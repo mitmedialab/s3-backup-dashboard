@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>S3 Backup Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Center for Civic Media Backup Status</h1>
+        </div>
+      </div>
+
+      <div class="row">
+        {% for app, info in latest_backups.iteritems() %}
+          <div class="col-md-4">
+            <b>{{app}}</b>:
+            <span class="label label-{{info['status']}}">{{info['date']}}</span>
+          </div>
+        {% endfor %}
+      </div>
+
+    </div>
+
+  </body>
+
+</html>
