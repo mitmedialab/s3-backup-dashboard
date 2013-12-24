@@ -15,6 +15,8 @@ pip install flask
 pip install boto
 ```
 
+Then copy `app.config.template` to `app.config` and enter in your S3 credentials.
+
 Use
 ---
 
