@@ -2,3 +2,6 @@
 access_key_id: 123
 secret_access_key: 1234
 bucket: path/to/backups
+
+[blacklist]
+app_list: app1, app2

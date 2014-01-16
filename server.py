@@ -24,12 +24,16 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    # get blacklist
+    blacklist = set(x.trim() for x in config.get('blacklist', 'apps').split(','))
     # get everything in the bucket
     bucket = s3.get_bucket( config.get('s3','bucket') ) 
     file_list = [ key.name.split('/') for key in sorted(bucket.list()) ]
     latest_backups = {}
     # build a list of the latest backups per app
     for path_parts in file_list:
+        if (path_parts[2] in blacklist):
+            continue
         app_name = inflector.titleize(path_parts[1])
         date_str = path_parts[2]
         date = datetime.strptime(date_str,'%Y.%m.%d.%H.%M.%S')
