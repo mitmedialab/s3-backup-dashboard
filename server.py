@@ -32,7 +32,7 @@ def index():
     latest_backups = {}
     # build a list of the latest backups per app
     for path_parts in file_list:
-        if (path_parts[2] in blacklist):
+        if (path_parts[1] in blacklist):
             continue
         app_name = inflector.titleize(path_parts[1])
         date_str = path_parts[2]
