@@ -25,7 +25,7 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     # get blacklist
-    blacklist = set(x.trim() for x in config.get('blacklist', 'app_list').split(','))
+    blacklist = set(x.strip() for x in config.get('blacklist', 'app_list').split(','))
     # get everything in the bucket
     bucket = s3.get_bucket( config.get('s3','bucket') ) 
     file_list = [ key.name.split('/') for key in sorted(bucket.list()) ]
