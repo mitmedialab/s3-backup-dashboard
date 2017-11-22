@@ -20,10 +20,10 @@
       </div>
 
       <div class="row">
-        {% for app, info in latest_backups.iteritems() %}
+        {% for info in latest_backups %}
           <div class="col-md-3" style="padding-bottom:6px;">
             <p>
-              <b>{{app}}</b>
+              <b>{{info['clean_app_name']}}</b>
               <br /><small class="text-muted">{{info['date']}}</small>
               {% if info['status'] in ['warning','danger'] %}
                 <br /><span class="label label-{{info['status']}}">{{info['relative_date']}} ago</span>

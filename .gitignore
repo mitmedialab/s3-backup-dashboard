@@ -1,3 +1,6 @@
 *.pyc
 app.config
-s3-backup-dashboard.log
+*.log
+venv
+.idea
+

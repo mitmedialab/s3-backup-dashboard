@@ -1,7 +1,5 @@
-[s3]
-access_key_id: 123
-secret_access_key: 1234
-bucket: path/to/backups
-
-[blacklist]
-app_list: app1, app2
+[app]
+S3_ACCESS_KEY_ID: 123
+S3_SECRET_ACCESS_KEY: 1234
+S3_BUCKET: path/to/backups/s3
+APP_BLACKLIST: app1, app2

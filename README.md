@@ -8,12 +8,8 @@ Installation
 
 Make sure you havy Python 2.7 (and the pip package manager).
 
-You also need to install the flask and libraries:
-
 ```
-pip install flask
-pip install boto
-```
+pip install -r requiremnts
 
 Then copy `app.config.template` to `app.config` and enter in your S3 credentials.
 

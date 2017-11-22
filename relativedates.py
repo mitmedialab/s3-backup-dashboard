@@ -2,13 +2,16 @@
 
 import datetime
 
+
 def ungettext(a,b,count):
     if count>1:
         return b
     return a
 
+
 def ugettext(a):
     return a
+
 
 def timesince(d, now=None):
     
