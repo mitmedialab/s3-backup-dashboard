@@ -23,7 +23,7 @@
         {% for info in latest_backups %}
           <div class="col-md-3" style="padding-bottom:6px;">
             <p>
-              <b>{{info['clean_app_name']}}</b>
+              <b>{{info['app_name']}}</b>
               <br /><small class="text-muted">{{info['date']}}</small>
               {% if info['status'] in ['warning','danger'] %}
                 <br /><span class="label label-{{info['status']}}">{{info['relative_date']}} ago</span>

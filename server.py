@@ -2,7 +2,6 @@ import os
 import logging
 import ConfigParser
 from operator import itemgetter
-from inflector import Inflector
 from relativedates import timesince
 from datetime import datetime
 from flask import Flask, render_template
@@ -37,8 +36,6 @@ blacklist = set(x.strip() for x in app.config['APP_BLACKLIST'].split(','))
 # connect to s3
 s3 = S3Connection(app.config['S3_ACCESS_KEY_ID'], app.config['S3_SECRET_ACCESS_KEY'])
 
-inflector = Inflector()  # helper for nice naming in UI
-
 
 @app.route("/")
 def index():
@@ -51,7 +48,6 @@ def index():
         app_name = path_parts[1]
         if app_name in blacklist:
             continue
-        clean_app_name = inflector.titleize(path_parts[1])
         date_str = path_parts[2]
         logger.debug(app_name)
         date = datetime.strptime(date_str, '%Y.%m.%d.%H.%M.%S')
@@ -63,10 +59,12 @@ def index():
                 status = 'warning'
             else:
                 status = 'danger'
-            latest_backups[app_name] = {'app_name': app_name, 'clean_app_name': clean_app_name,
-                                        'date': date, 'relative_date': timesince(date), 'status': status}
+            latest_backups[app_name] = {'app_name': app_name,
+                                        'date': date,
+                                        'relative_date': timesince(date),
+                                        'status': status}
 
-    latest_backups = sorted(latest_backups.values(), key=itemgetter('clean_app_name'))
+    latest_backups = sorted(latest_backups.values(), key=itemgetter('app_name'))
     return render_template("base.html", latest_backups=latest_backups)
 
 

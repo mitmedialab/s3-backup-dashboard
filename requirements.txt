@@ -1,3 +1,2 @@
-inflector
 flask
 boto
