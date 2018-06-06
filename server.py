@@ -50,8 +50,13 @@ def index():
             continue
         date_str = path_parts[2]
         logger.debug(app_name)
-        date = datetime.strptime(date_str, '%Y.%m.%d.%H.%M.%S')
-        if (app_name not in latest_backups.keys()) or (date > latest_backups[app_name]['date']):
+        try:
+            date = datetime.strptime(date_str, '%Y.%m.%d.%H.%M.%S')
+        except ValueError:
+            logger.warn("Date '{}' didn't parse on {}".format(date_str, app_name))
+            date = None
+        if (date is not None) and (app_name not in latest_backups.keys()) or \
+                ((app_name in latest_backups) and (date > latest_backups[app_name]['date'])):
             age = (datetime.now() - date).days
             if age < 1:
                 status = 'success'
