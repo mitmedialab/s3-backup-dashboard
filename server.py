@@ -19,7 +19,7 @@ logger.info("-------------------------------------------------------------------
 app = Flask(__name__)
 
 # load config from file, fallback to envvars on production system
-settings = ['S3_ACCESS_KEY_ID', 'S3_SECRET_ACCESS_KEY', 'S3_BUCKET', 'APP_BLACKLIST']
+settings = ['S3_ACCESS_KEY_ID', 'S3_SECRET_ACCESS_KEY', 'S3_BUCKET', 'APPS_TO_CHECK']
 try:
     config = ConfigParser.ConfigParser()
     config.read(os.path.join(BASE_DIR, CONFIG_FILENAME))
@@ -31,7 +31,7 @@ except ConfigParser.NoSectionError:
         app.config[s] = os.environ[s]
 
 # get blacklist of apps to ignore (ie. not automated with Backups package
-blacklist = set(x.strip() for x in app.config['APP_BLACKLIST'].split(','))
+whitelist = set(x.strip() for x in app.config['APPS_TO_CHECK'].split(','))
 
 # connect to s3
 s3 = S3Connection(app.config['S3_ACCESS_KEY_ID'], app.config['S3_SECRET_ACCESS_KEY'])
@@ -46,15 +46,26 @@ def index():
     # build a list of the latest backups per app
     for path_parts in file_list:
         app_name = path_parts[1]
-        if app_name in blacklist:
+        if app_name not in whitelist:
             continue
         date_str = path_parts[2]
+        if len(date_str) is 0:
+            continue
         logger.debug(app_name)
-        try:
-            date = datetime.strptime(date_str, '%Y.%m.%d.%H.%M.%S')
-        except ValueError:
-            logger.warn("Date '{}' didn't parse on {}".format(date_str, app_name))
-            date = None
+        # parse date out of filename
+        if date_str.endswith('.tgz'):
+            date_str = date_str[-23:-4]
+            try:
+                date = datetime.strptime(date_str, '%Y-%m-%d-%H-%M-%S')
+            except ValueError:
+                logger.warn("Date '{}' didn't parse on {}".format(date_str, app_name))
+                date = None
+        else:
+            try:
+                date = datetime.strptime(date_str, '%Y.%m.%d.%H.%M.%S')
+            except ValueError:
+                logger.warn("Date '{}' didn't parse on {}".format(date_str, app_name))
+                date = None
         if (date is not None) and (app_name not in latest_backups.keys()) or \
                 ((app_name in latest_backups) and (date > latest_backups[app_name]['date'])):
             age = (datetime.now() - date).days
